@@ -37,7 +37,7 @@
 #import "Playtomic.h"
 #import "PlaytomicGeoIP.h"
 #import "PlaytomicResponse.h"
-#import "JSON/JSON.h"
+#import "JSONKit.h"
 #import "PlaytomicRequest.h"
 #import "PlaytomicEncrypt.h"
 #import "PlaytomicURLRequest.h"
@@ -120,16 +120,9 @@
     }
     
     // we got a response of some kind
-    NSString *response = [request responseString];
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSArray *data = [[request responseString] objectFromJSONString];
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
-    
-    [request release];
-    [json release];
-    [parser release];
-    
+
     // failed on the server side
     if(status != 1)
     {

@@ -37,7 +37,7 @@
 #import "PlaytomicLevel.h"
 #import "PlaytomicResponse.h"
 #import "Playtomic.h"
-#import "JSON/JSON.h"
+#import "JSONKit.h"
 #import "PlaytomicRequest.h"
 #include "PlaytomicEncrypt.h"
 #import "PlaytomicURLRequest.h"
@@ -343,14 +343,9 @@
     }
     
     // we got a response of some kind
-    NSString *response = [request responseString];
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSArray *data = [[request responseString] objectFromJSONString];
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
     
-    [json release];
-    [parser release];
     [request release];
     // failed on the server side
     if(status != 1)
@@ -422,16 +417,11 @@
     }
     
     // we got a response of some kind
-    NSString *response = [request responseString];
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSData *data = [[request responseString] objectFromJSONString];
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
     NSInteger errorcode = [[data valueForKey:@"ErrorCode"] integerValue];
     
     //[request autorelrease];
-    [json release];
-    [parser release];
     [request release];
     // failed on the server side
     if(status != 1)
@@ -543,15 +533,10 @@
     }
     
     // we got a response of some kind
-    NSString *response = [request responseString];
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSArray *data = [[request responseString] objectFromJSONString];
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
     
     //[request autorelease];
-    [json release];
-    [parser release];
     [request release];
     // failed on the server side
     if(status != 1)
@@ -656,15 +641,10 @@
         return;
     }
     
-    NSString *response = [request responseString];       
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSArray *data = [[request responseString] objectFromJSONString];       
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
     NSInteger errorcode = [[data valueForKey:@"ErrorCode"] integerValue];
     
-    [json release];
-    [parser release];
     [request release];
     if(status == 1)
     {

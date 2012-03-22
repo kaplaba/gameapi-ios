@@ -9,7 +9,7 @@
 #import "PlaytomicRequest.h"
 #import "PlaytomicEncrypt.h"
 #import "Playtomic.h"
-#import "JSON/JSON.h"
+#import "JSONKit.h"
 #import "PlaytomicURLRequest.h"
 
 
@@ -172,14 +172,10 @@ NSInteger compareStringValue(id a, id b, void *context) {
     
     NSString *response = [request responseString];       
   
-    NSString *json = [[NSString alloc] initWithString:response];
-    PlaytomicSBJsonParser *parser = [[PlaytomicSBJsonParser alloc] init];
-    NSArray *data = [parser objectWithString:json error:nil];
+    NSArray *data = [[[NSString alloc] initWithString:response] objectFromJSONString];
     NSInteger status = [[data valueForKey:@"Status"] integerValue];
     NSInteger errorcode = [[data valueForKey:@"ErrorCode"] integerValue];
     
-    [json release];
-    [parser release];
     //[request release];
     if(status == 1)
     {
